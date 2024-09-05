@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React,{ useState } from "react";
 import Image from "next/image";
 import SearchManufacturer from "./SearchManufacturer";
 import { useRouter } from "next/navigation";
@@ -46,7 +46,7 @@ const SearchBar = () => {
         searchParams.delete('manufacturer')
       }
 
-      const newPathname = `${window.location.pathname} ? ${searchParams.toString}`
+      const newPathname = `${window.location.pathname}?${searchParams.toString()}`
 
       router.push(newPathname)
       
