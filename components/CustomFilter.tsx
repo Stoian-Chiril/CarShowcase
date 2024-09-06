@@ -8,7 +8,7 @@ import { CustomFilterProps } from '@/types';
 import { updateSearchParams } from '@/utils';
 
 const CustomFilter = ({title,options}: CustomFilterProps) => {
-  const [selected, setSelected] = useState(options[0]);
+  const[selected, setSelected] = useState(options[0]);
   //console.log(options); // Выведет все опции
 
   const router = useRouter();
