@@ -1,75 +1,77 @@
-"use client";
+'use client';
 
-import {useState, Fragment} from 'react'
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { Listbox, Transition } from '@headlessui/react';
-import { CustomFilterProps } from '@/types';
-import { updateSearchParams } from '@/utils';
+import { Fragment, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition } from "@headlessui/react";
+import { CustomFilterProps } from "@/types";
+import { updateSearchParams } from "@/utils";
 
-const CustomFilter = ({title,options}: CustomFilterProps) => {
-  const[selected, setSelected] = useState(options[0]);
-  //console.log(options); // Выведет все опции
+const CustomFilter = ({title, options}: CustomFilterProps) => {
+  const [selected, setSelected] = useState(options[0])
+  const router = useRouter()
 
-  const router = useRouter();
-  const handleUpdateParams= (e: {title:string, value: string}) => {
-    const newPathName = updateSearchParams(title, e.value.toLowerCase())
+  const handleUpdateParams = (e: {title: string, value:string}) => {
+  const newPathName = updateSearchParams(title, e.value.toLowerCase())
 
-    router.push(newPathName)
+  router.push(newPathName, {scroll: false})
   }
+
   return (
-    
     <div className='w-fit'>
-    <Listbox value={selected} onChange={(e) => {
-      setSelected(e);
-      handleUpdateParams(e);
-    }}
+      <Listbox
+        value={selected}
+        onChange={(e)=>{
+          setSelected(e);
+          handleUpdateParams(e)
+        }}
       >
         <div className='relative w-fit z-10'>
-          <Listbox.Button className="custom-filter__btn">
+          <ListboxButton className='custom-filter__btn'>
             <span className='block truncate'>
               {selected.title}
             </span>
             <Image 
-              src="/chevron-up-down.svg"
-              width={20}
-              height={20}
-              className='ml-4 object-contain'
-              alt='chevron up down'
-            />
-          </Listbox.Button>
+            src='/chevron-up-down.svg' 
+            width={20} 
+            height={20} 
+            className='ml-4 
+            object-contain' 
+            alt='chevron_up-down' 
+          />
+          </ListboxButton>
           <Transition
-            as={Fragment}
+            as={Fragment} 
             leave='transition ease-in duration-100'
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
           >
-          <Listbox.Options className='custom-filter__options' >
+            <ListboxOptions 
+              anchor="bottom"
+              className="bsolute mt-1 max-h-60 w-auto overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            >
               {options.map((option) => (
-                <Listbox.Option
+                <ListboxOption
                   key={option.title}
-                  className={({ active }) =>
-                    `relative cursor-default select-none py-2 px-4 ${
-                      active ? "bg-primary-blue text-white" : "text-gray-900"
-                    }`
-                  }
+                  className= "relative data-[focus]:bg-blue-300 cursor-default select-none py-2 px-4"
+                  
                   value={option}
                 >
                   {({ selected }) => (
                     <>
-                      <span className={`block truncate ${ selected ? "font-medium" : "font-normal"}`} >
+                      <span className={`block ml-2 truncate ${selected ? "font-medium" : "font-normal"}`} >
                         {option.title}
                       </span>
                     </>
                   )}
-                </Listbox.Option>
+                </ListboxOption>
               ))}
-            </Listbox.Options>
+            </ListboxOptions>
           </Transition>
-        </div>
+          </div>
       </Listbox>
     </div>
-  )
+  );
 }
 
 export default CustomFilter
